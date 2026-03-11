@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier Eric Perou - Automobiles de Collection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Georgia, serif; color: #333; background: #f5f5f5; line-height: 1.6; }
+        
+        nav { background: #1a1a1a; padding: 1rem; position: sticky; top: 0; z-index: 100; }
+        nav ul { list-style: none; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        nav a { color: #fff; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
+        nav a:hover { color: #c9a961; }
+        
+        .hero { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: #fff; padding: 3rem 1rem; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .hero p { color: #c9a961; margin-bottom: 1.5rem; }
+        .btn { background: #c9a961; color: #1a1a1a; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; }
+        .btn:hover { background: #d4af7a; }
+        
+        section { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        h2 { font-size: 1.8rem; margin-bottom: 1.5rem; border-bottom: 3px solid #c9a961; padding-bottom: 0.5rem; display: inline-block; }
+        
+        .box { background: white; padding: 1.5rem; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .box p { margin-bottom: 0.8rem; color: #666; }
+        .box strong { color: #c9a961; }
+        
+        /* VOITURES - SIMPLE */
+        .cars { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+        
+        .car { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s; display: flex; flex-direction: column; }
+        .car:hover { transform: translateY(-5px); }
+        
+        .car-img { width: 100%; object-fit: contain; display: block; background: #f0f0f0; padding: 1rem; flex-grow: 1; }
+        
+        .car-info { padding: 1rem; background: white; }
+        .car-year { color: #c9a961; font-size: 0.85rem; }
+        .car-title { font-size: 1.2rem; font-weight: 600; margin: 0.3rem 0; }
+        .car-desc { font-size: 0.85rem; color: #666; margin: 0.5rem 0; line-height: 1.4; }
+        .car-price { font-size: 1.3rem; color: #c9a961; font-weight: bold; margin-top: 0.8rem; }
+        
+        /* PAGINATION */
+        .pagination { display: flex; justify-content: center; gap: 0.5rem; margin: 2rem 0; flex-wrap: wrap; }
+        .pagination button { background: white; border: 1px solid #c9a961; color: #c9a961; padding: 0.6rem 1rem; border-radius: 4px; cursor: pointer; }
+        .pagination button:hover { background: #c9a961; color: white; }
+        .pagination button.active { background: #c9a961; color: white; }
+        .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .pagination-info { text-align: center; color: #666; margin-bottom: 1rem; font-size: 0.9rem; }
+        
+        /* CONTACT */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1.5rem 0; }
+        
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 500; font-size: 0.95rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; font-family: inherit; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #c9a961; }
+        
+        .success { display: none; background: #4caf50; color: white; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; }
+        .success.show { display: block; }
+        
+        footer { background: #1a1a1a; color: #fff; text-align: center; padding: 1.5rem; margin-top: 3rem; font-size: 0.85rem; }
+        footer a { color: #c9a961; text-decoration: none; }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero { padding: 2rem 1rem; }
+            .hero h1 { font-size: 1.8rem; }
+            nav ul { gap: 0.5rem; }
+            .cars { grid-template-columns: 1fr; }
+            .contact-grid { grid-template-columns: 1fr; gap: 1rem; }
+            h2 { font-size: 1.3rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.3rem; }
+            nav a { font-size: 0.75rem; }
+            .pagination button { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+            .car { border-radius: 4px; }
+            .car-img { height: 180px; }
+            .car-info { padding: 0.8rem; }
+            .car-title { font-size: 1rem; }
+            .car-price { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <ul>
+            <li><a onclick="scroll('hero')">Accueil</a></li>
+            <li><a onclick="scroll('histoire')">Histoire</a></li>
+            <li><a onclick="scroll('voitures')">Voitures</a></li>
+            <li><a onclick="scroll('contact')">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero" id="hero">
+        <h1>ATELIER ERIC PEROU</h1>
+        <p>Spécialiste en automobiles de collection depuis 1980</p>
+        <button class="btn" onclick="scroll('voitures')">Découvrir nos voitures</button>
+    </div>
+
+    <!-- HISTOIRE -->
+    <section id="histoire">
+        <h2>Notre Histoire</h2>
+        <div class="box">
+            <p><strong>Depuis 1980</strong>, l'Atelier Eric Perou est passionné par les automobiles de collection, particulièrement les voitures de sport anglaises des années 1960. Notre expertise reconnue s'est construite sur des décennies de travail minutieux.</p>
+            <p>Situé à Louans en Touraine, notre atelier combine tradition artisanale et savoir-faire technique. Nous sommes <strong>spécialistes Austin Healey</strong> et maîtrisons la restauration complète, la préparation compétition et l'entretien de tous les véhicules de collection.</p>
+            <p>Chaque projet est traité avec le soin et l'attention qu'il mérite. Notre équipe expérimentée vous accompagne du diagnostic initial à la remise en circulation de votre véhicule.</p>
+            <p>Présent régulièrement à <strong>Rétromobile</strong> et aux grands rassemblements automobiles, l'Atelier Eric Perou est reconnu comme un partenaire de confiance.</p>
+        </div>
+    </section>
+
+    <!-- VOITURES -->
+    <section id="voitures">
+        <h2>Nos Voitures en Vente</h2>
+        <div class="pagination-info" id="info"></div>
+        <div class="cars" id="cars"></div>
+        <div class="pagination" id="pagination"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <h2>Nous Contacter</h2>
+        <div class="contact-grid">
+            <div class="box">
+                <h3 style="margin-bottom: 1rem;">Informations</h3>
+                <p><strong>Adresse</strong><br>39, La Petite Rue<br>37320 Louans, France</p>
+                <p><strong>Téléphone</strong><br><a href="tel:+33247928989" style="color: #c9a961;">+33 (0)2 47 92 89 89</a></p>
+                <p><strong>Horaires</strong><br>Lun-Ven: 9h-18h<br>Sam: 10h-13h<br>Dim: Fermé</p>
+            </div>
+
+            <div class="box">
+                <h3 style="margin-bottom: 1rem;">Formulaire</h3>
+                <div id="success" class="success">✅ Message envoyé!</div>
+                <form onsubmit="handleForm(event)">
+                    <div class="form-group">
+                        <label>Nom *</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label>Objet *</label>
+                        <input type="text" id="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message *</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2024 Atelier Eric Perou - Automobiles de Collection</p>
+        <p>39, La Petite Rue - 37320 Louans - France</p>
+        <p><a href="tel:+33247928989">Téléphone</a> | <a href="https://www.facebook.com/atelierericperou">Facebook</a> | <a href="https://www.instagram.com/atelierericperou">Instagram</a></p>
+    </footer>
+
+    <script>
+        const CARS_PER_PAGE = 8;
+        let currentPage = 1;
+        let allCars = [];
+
+        function loadCars() {
+            allCars = JSON.parse(localStorage.getItem('atelierCars') || '[]');
+            
+            // Si aucune voiture, charger les exemples
+            if (allCars.length === 0) {
+                allCars = [
+                    { id: '1', brand: 'Austin Healey', model: '3000', year: 1964, price: 45000, description: 'Magnifique exemplaire de 1964 en très bon état. Moteur refait en 2009.', image: 'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=400&h=300&fit=crop' },
+                    { id: '2', brand: 'Jaguar', model: 'E-Type', year: 1968, price: 65000, description: 'Élégante Jaguar E-Type de 1968. Restauration complète réalisée avec soin.', image: 'https://images.unsplash.com/photo-1530274455887-a76b5d2016fa?w=400&h=300&fit=crop' },
+                    { id: '3', brand: 'MG', model: 'B', year: 1972, price: 28000, description: 'Petite sportive britannique très agréable à piloter. État mécanique excellent.', image: 'https://images.unsplash.com/photo-1527761207461-cf1a1c11c832?w=400&h=300&fit=crop' }
+                ];
+                localStorage.setItem('atelierCars', JSON.stringify(allCars));
+            }
+            
+            currentPage = 1;
+            render();
+        }
+
+        function render() {
+            const start = (currentPage - 1) * CARS_PER_PAGE;
+            const end = start + CARS_PER_PAGE;
+            const displayed = allCars.slice(start, end);
+
+            // Info
+            document.getElementById('info').innerHTML = allCars.length === 0 ? '' : 
+                `Affichage ${start + 1} à ${Math.min(end, allCars.length)} sur ${allCars.length}`;
+
+            // Cartes
+            if (displayed.length === 0) {
+                document.getElementById('cars').innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #999;">Aucune voiture en vente</p>';
+            } else {
+                document.getElementById('cars').innerHTML = displayed.map(car => `
+                    <div class="car">
+                        <img src="${car.image}" alt="${car.brand}" class="car-img" style="width: 100%; object-fit: contain; display: block; background: #f0f0f0; padding: 1rem; flex-grow: 1;">
+                        <div class="car-info">
+                            <div class="car-year">${car.year}</div>
+                            <div class="car-title">${car.brand} ${car.model}</div>
+                            <div class="car-desc">${car.description.substring(0, 80)}...</div>
+                            <div class="car-price">${car.price.toLocaleString('fr-FR')}€</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Pagination
+            const pages = Math.ceil(allCars.length / CARS_PER_PAGE);
+            if (pages <= 1) {
+                document.getElementById('pagination').innerHTML = '';
+            } else {
+                let html = `<button onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Précédent</button>`;
+                for (let i = 1; i <= pages; i++) {
+                    html += `<button onclick="goPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+                }
+                html += `<button onclick="goPage(${currentPage + 1})" ${currentPage === pages ? 'disabled' : ''}>Suivant →</button>`;
+                document.getElementById('pagination').innerHTML = html;
+            }
+        }
+
+        function goPage(p) {
+            const pages = Math.ceil(allCars.length / CARS_PER_PAGE);
+            if (p >= 1 && p <= pages) {
+                currentPage = p;
+                render();
+                scroll('voitures');
+            }
+        }
+
+        function handleForm(e) {
+            e.preventDefault();
+            const lead = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value,
+                date: new Date().toLocaleString('fr-FR')
+            };
+            let leads = JSON.parse(localStorage.getItem('atelierLeads') || '[]');
+            leads.push(lead);
+            localStorage.setItem('atelierLeads', JSON.stringify(leads));
+            
+            e.target.reset();
+            const msg = document.getElementById('success');
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+        }
+
+        function scroll(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        loadCars();
+        let lastData = JSON.stringify(allCars);
+        setInterval(() => {
+            const newData = JSON.stringify(JSON.parse(localStorage.getItem('atelierCars') || '[]'));
+            if (newData !== lastData) {
+                lastData = newData;
+                loadCars();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
